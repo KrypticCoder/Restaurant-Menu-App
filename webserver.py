@@ -8,18 +8,13 @@ from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
 # from server to client rather than the 'query string' that is part of the URL
 import cgi
 
-# Need to append the subdirectory to our current path in order to access our previous db files
-# Python only checks up a directory tree, not down 
-import sys
-sys.path.append("./IntroToSQLAlchemy/")
-
 # import the database we created in first lesson
 from database_setup import Base, Restaurant, MenuItem
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 # Create session and connect to DB ##
-engine = create_engine('sqlite:///IntroToSQLALchemy/restaurantmenu.db')
+engine = create_engine('sqlite:///restaurantmenu.db')
 Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
@@ -44,13 +39,7 @@ class webserverHandler(BaseHTTPRequestHandler):
                 output = ""
                 # Provide link to create a new restaurant
                 output += "<a href = '/restaurants/new' > Make a New Restaurant Here </a></br></br>"
-                # Successful GET request
-                self.send_response(200)     
-                # Inform client we are replying with text in the form of html
-                self.send_header('Content-type', 'text/html')
-                self.end_headers()
-            
-
+               
                 for restaurant in restaurants:
                     output += restaurant.name
                     output += "</br>"
