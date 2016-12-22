@@ -1,8 +1,8 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from database_setup import Base, Restaurant, MenuItem  
+from database_setup import Base, Restaurant, MenuItem  # Existing database
 engine = create_engine('sqlite:///restaurantmenu.db')  # Lets program know which database 
-                                                        # engine we want to communicate with
+                                                    # engine we want to communicate with
 
 Base.metadata.bind = engine # Connects class connections to tables in db
 
