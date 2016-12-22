@@ -17,22 +17,32 @@ we want to execute but not send them to database until we call session.commit
 
 session = DBSession() # Staging area for all objects loaded into database session object 
 
+mcdonalds = session.query(Restaurant).filter_by(name = 'McDonalds').all()
+for mac in mcdonalds:
+    session.delete(mac)
+session.commit()
 
-##### Inserting into db #####
+##### INSERTING #####
+print("Inserting values into db...")
 
 # Perform insert on Restaurant table
 myFirstRestaurant = Restaurant(name = "Pizza Palace")
 session.add(myFirstRestaurant) 
-session.commit()  
+session.commit() 
+
+mySecondRestaurant = Restaurant(name = "McDonalds")
+session.add(mySecondRestaurant)
+session.commit
 
 # Perform insert on MenuItem table
 cheesepizza = MenuItem(name = "Cheese Pizza", description = "Made with all natural ingredients and fresh mozzarella", course = "Entree", price = "$8.99", restaurant = myFirstRestaurant)
 session.add(cheesepizza)
 session.commit()
+print('Items inserted')
+print('\n')
 
-
-##### Querying db ##### 
-
+##### QUERYING ##### 
+print('Querying db...')
 # list of all objects in Restaurants and MenuItem tables
 all_restaurants = session.query(Restaurant).all()  
 all_items = session.query(MenuItem).all()
@@ -43,10 +53,26 @@ firstRestaruant.name
 firstItem = session.query(MenuItem).first()
 firstItem.name
 
-print(firstRestaruant.name)
-print(firstItem.name)
+print('first and only restaurant: ' + firstRestaruant.name)
+print('first and only item: ' + firstItem.name)
+print('\n')
 
-# Delete items from db
+
+##### UPDATING #####
+print('Updating values in db...')
+secondRestaurant = session.query(Restaurant).filter_by(name = 'McDonalds').one()
+print(secondRestaurant.name)
+secondRestaurant.name = 'Panera Bread' 
+print('Restaurant name changed to ' + secondRestaurant.name)
+session.add(secondRestaurant)
+session.commit()
+print('\n')
+
+
+##### DELETING #####
+print('Deleting values from db... ')
+
+##### Delete items from db #####
 for restaurant in all_restaurants:
     session.delete(restaurant)
 for item in all_items:
