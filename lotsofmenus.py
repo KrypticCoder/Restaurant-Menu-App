@@ -233,7 +233,7 @@ session.add(menuItem3)
 session.commit()
 
 menuItem4 = MenuItem(name="Choc Full O\' Mint (Smitten\'s Fresh Mint Chip ice cream)",
-                     description="Milk, cream, salt, ..., Liquid nitrogen magic", price="$3.95", course="Dessert", restaurant=restaurant1)
+                     description="Milk, cream, salt, Liquid nitrogen magic", price="$3.95", course="Dessert", restaurant=restaurant1)
 
 session.add(menuItem4)
 session.commit()
