@@ -2,12 +2,11 @@
 
 ## Assignment 
 For this exercise you will be the database architect for the Uda Country District of Animal Shelters. The shelters need a database for adopting puppies.
-</br>
-Using SQLAlchemy perform the following queries on your database:
-1. Query for all puppies and return the results in ascending alphabetical
-order.
-2. Query for all puppies that are less than 6 months old organized by the
-youngest first.
+
+Using SQLAlchemy, perform the following queries on the database:
+
+1. Query for all puppies and return the results in ascending alphabetical order.
+2. Query for all puppies that are less than 6 months old organized by the youngest first.
 3. Query all puppies by ascending weight.
 4. Query all puppies grouped by the shelter in which they are staying.
 
