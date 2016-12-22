@@ -26,7 +26,9 @@ def restaurantMenu(restaurant_id):
 @app.route('/restaurants/<int:restaurant_id>/new/', methods=['GET', 'POST'])
 def newMenuItem(restaurant_id):
     if request.method == 'POST':
-        newItem = MenuItem(name = request.form['name'], restaurant_id=restaurant_id)
+        newItem = MenuItem(name=request.form['name'], description=request.form['description'], 
+                            price=request.form['price'], course=request.form['course'], 
+                            restaurant_id=restaurant_id)
         session.add(newItem)
         session.commit()
         flash("Menu item \'%s\' created" % newItem.name)
@@ -38,8 +40,14 @@ def newMenuItem(restaurant_id):
 def editMenuItem(restaurant_id, menu_id):
     editItem = session.query(MenuItem).filter_by(id=menu_id).one()
     if request.method == 'POST':
-        flash("Menu item \'%s\' has been changed to \'%s\'" % (editItem.name, request.form['name']))
-        editItem.name = request.form['name']
+        if request.form['name']:
+            flash("Menu item \'%s\' has been changed to \'%s\'" % (editItem.name, request.form['name']))
+        else:
+            flash("Menu item \'%s\' has been changed" % editItem.name)
+        editItem.name = request.form['name'] if request.form['name'] else editItem.name
+        editItem.description = request.form['description'] if request.form['description'] else editItem.description
+        editItem.price = request.form['price'] if request.form['price'] else editItem.price
+        editItem.course = request.form['course'] if request.form['course'] else editItem.course
         session.add(editItem)
         session.commit()
         return redirect(url_for('restaurantMenu', restaurant_id=restaurant_id))
