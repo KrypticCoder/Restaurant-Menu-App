@@ -2,7 +2,7 @@
 
 ## Assignment 
 For this exercise you will be the database architect for the Uda Country District of Animal Shelters. The shelters need a database for adopting puppies.
-<br>
+</br>
 Using SQLAlchemy perform the following queries on your database:
 1. Query for all puppies and return the results in ascending alphabetical
 order.
