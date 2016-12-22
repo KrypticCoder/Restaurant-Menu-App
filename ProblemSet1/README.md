@@ -12,7 +12,7 @@ Using SQLAlchemy, perform the following queries on the database:
 
 ## Files
 * `puppies.py` - Creates the database
-* `puppypopulator.py` - Inserts values into the database
+* `puppypopulator.py` - Inserts values into the database (Given by instructor)
 * `queries.py` - Program to query the database
 
 
