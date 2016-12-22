@@ -1,9 +1,9 @@
 # Problem Set 1
 
 ## Assignment 
-For this exercise you will be the database architect for the Uda Country District of Animal Shelters. The shelters need a database for adopting puppies. 
-
-Using SQLAlchemy perform the following queries on your database
+For this exercise you will be the database architect for the Uda Country District of Animal Shelters. The shelters need a database for adopting puppies.
+<br>
+Using SQLAlchemy perform the following queries on your database:
 1. Query for all puppies and return the results in ascending alphabetical
 order.
 2. Query for all puppies that are less than 6 months old organized by the
@@ -38,8 +38,6 @@ To run the `puppyqueries.py` script, run this command:
 
     python queries.py
 
-This will display a menu in a terminal based interface where you select menu
-item numbers to call the various functions, including exiting the script if you
-choose. All data is dumped to `STDOUT` and is not paginated.
+Follow directions outputted.
 
 [1]:http://www.postgresql.org/docs/9.3/static/server-start.html
