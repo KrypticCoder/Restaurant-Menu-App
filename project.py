@@ -1,4 +1,6 @@
-from flask import Flask, render_template, request, redirect, url_for
+# Message flashing is a feature that will prompt a message to the user 
+# immediately after certain action has taken place then
+from flask import Flask, render_template, request, redirect, url_for, flash
 # Create instance of this class with name of running app
 app = Flask(__name__)
 
@@ -27,6 +29,7 @@ def newMenuItem(restaurant_id):
         newItem = MenuItem(name = request.form['name'], restaurant_id=restaurant_id)
         session.add(newItem)
         session.commit()
+        flash("Menu item \'%s\' created" % newItem.name)
         return redirect(url_for('restaurantMenu', restaurant_id=restaurant_id))
     else:
         return render_template('newmenuitem.html', restaurant_id=restaurant_id)
@@ -35,6 +38,7 @@ def newMenuItem(restaurant_id):
 def editMenuItem(restaurant_id, menu_id):
     editItem = session.query(MenuItem).filter_by(id=menu_id).one()
     if request.method == 'POST':
+        flash("Menu item \'%s\' has been changed to \'%s\'" % (editItem.name, request.form['name']))
         editItem.name = request.form['name']
         session.add(editItem)
         session.commit()
@@ -48,6 +52,7 @@ def deleteMenuItem(restaurant_id, menu_id):
     if request.method == 'POST':
         session.delete(deleteItem)
         session.commit()
+        flash("Menu item \'%s\' deleted" % deleteItem.name)
         return redirect(url_for('restaurantMenu', restaurant_id=restaurant_id))
     else:
         return render_template('deletemenuitem.html', item=deleteItem)
@@ -58,6 +63,10 @@ def deleteMenuItem(restaurant_id, menu_id):
 if __name__ == '__main__':
     # User of app can execute arbitrary python code on your computer
     app.debug = True
+
+    # Flask uses a secret_key to create sessions for our user
+    # Should be kept in separate file normally
+    app.secret_key = 'super_secret_key'
 
     # Server only accessible from host machine 
     # Using a vagrant env, so we must make our server publicly available
