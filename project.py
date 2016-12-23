@@ -1,6 +1,6 @@
 # Message flashing is a feature that will prompt a message to the user 
 # immediately after certain action has taken place then
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, flash, jsonify
 # Create instance of this class with name of running app
 app = Flask(__name__)
 
@@ -15,6 +15,19 @@ Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
+# Making an API Endpoint (GET Request)
+@app.route('/restaurants/<int:restaurant_id>/menu/JSON/')
+def restaurantMenuJSON(restaurant_id):
+    restaurant = session.query(Restaurant).filter_by(id=restaurant_id).one()
+    items = session.query(MenuItem).filter_by(restaurant_id=restaurant_id).all()
+    # returns pure data form of menu in format that can be easily parsed
+    return jsonify(MenuItems=[i.serialize for i in items])
+
+@app.route('/restaurants/<int:restaurant_id>/menu/<int:menu_id>/JSON/')
+def MenuItemJSON(restaurant_id, menu_id):
+    item = session.query(MenuItem).filter_by(id=menu_id).one()
+    return jsonify(MenuItems=[item.serialize])
+
 @app.route('/')
 @app.route('/restaurants/<int:restaurant_id>/')
 def restaurantMenu(restaurant_id):
@@ -25,6 +38,7 @@ def restaurantMenu(restaurant_id):
 
 @app.route('/restaurants/<int:restaurant_id>/new/', methods=['GET', 'POST'])
 def newMenuItem(restaurant_id):
+    # if user has clicked 'Create' button, POST request generated
     if request.method == 'POST':
         newItem = MenuItem(name=request.form['name'], description=request.form['description'], 
                             price=request.form['price'], course=request.form['course'], 
@@ -33,17 +47,21 @@ def newMenuItem(restaurant_id):
         session.commit()
         flash("Menu item \'%s\' created" % newItem.name)
         return redirect(url_for('restaurantMenu', restaurant_id=restaurant_id))
+    # GET request
     else:
         return render_template('newmenuitem.html', restaurant_id=restaurant_id)
 
-@app.route('/restaurants/<int:restaurant_id>/<int:menu_id>/edit', methods=['GET', 'POST'])
+@app.route('/restaurants/<int:restaurant_id>/<int:menu_id>/edit/', methods=['GET', 'POST'])
 def editMenuItem(restaurant_id, menu_id):
     editItem = session.query(MenuItem).filter_by(id=menu_id).one()
     if request.method == 'POST':
+        # if we are changing the name of the item, flash what name item is changed to
         if request.form['name']:
             flash("Menu item \'%s\' has been changed to \'%s\'" % (editItem.name, request.form['name']))
+        # Otherwise we notify user the item has been changed somehow
         else:
             flash("Menu item \'%s\' has been changed" % editItem.name)
+        # Change attribute of editItem only if field is specified in form
         editItem.name = request.form['name'] if request.form['name'] else editItem.name
         editItem.description = request.form['description'] if request.form['description'] else editItem.description
         editItem.price = request.form['price'] if request.form['price'] else editItem.price
@@ -54,7 +72,7 @@ def editMenuItem(restaurant_id, menu_id):
     else:
         return render_template('editmenuitem.html', item=editItem)
 
-@app.route('/restaurants/<int:restaurant_id>/<int:menu_id>/delete', methods=['GET', 'POST'])
+@app.route('/restaurants/<int:restaurant_id>/<int:menu_id>/delete/', methods=['GET', 'POST'])
 def deleteMenuItem(restaurant_id, menu_id):
     deleteItem = session.query(MenuItem).filter_by(id=menu_id).one()
     if request.method == 'POST':
