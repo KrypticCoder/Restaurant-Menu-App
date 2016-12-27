@@ -12,6 +12,26 @@ Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
+# JSON object for all restaurants
+@app.route('/restaurants/JSON/')
+def restaurantsJSON():
+    restaurants = session.query(Restaurant).all()
+    return jsonify(Restaurants=[i.serialize for i in restaurants])
+
+# JSON object for menu of specific restaurant
+@app.route('/restaurants/<int:restaurant_id>/menu/JSON/')
+def restaurantMenuJSON(restaurant_id):
+    restaurant = session.query(Restaurant).filter_by(id=restaurant_id).one()
+    items = session.query(MenuItem).filter_by(restaurant_id=restaurant_id).all()
+    # returns pure data form of menu in format that can be easily parsed
+    return jsonify(MenuItems=[i.serialize for i in items])
+
+# JSON object for specific menu item of a restaurant
+@app.route('/restaurants/<int:restaurant_id>/menu/<int:menu_id>/JSON/')
+def MenuItemJSON(restaurant_id, menu_id):
+    item = session.query(MenuItem).filter_by(id=menu_id).one()
+    return jsonify(MenuItems=[item.serialize])
+
 # Show all restaurants 
 @app.route('/')
 @app.route('/restaurants/')
