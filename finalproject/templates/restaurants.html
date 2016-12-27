@@ -1,10 +1,15 @@
 <html>
     <head>
-
+        <link rel=stylesheet type=text/css href="{{ url_for('static', filename='styles.css') }}">
     </head>
 
     <body>
-        <a href="{{url_for('newRestaurant')}}"><h3> Create a new Restaurant </h3></a>
+
+        <h1 class='header'>Main Page</h1>
+
+        </br>
+        <a href="{{url_for('newRestaurant')}}"><h3 > Create a new Restaurant </h3></a>
+        </br>
 
         {% with messages = get_flashed_messages() %}
 
@@ -28,7 +33,7 @@
 
             <p> <a href = "{{url_for('deleteRestaurant',restaurant_id = restaurant.id)}}">Delete Restaurant</a> </p>
 
-            </br></br>
+            </br>
 
         {% endfor%}
 
