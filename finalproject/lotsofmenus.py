@@ -18,6 +18,21 @@ DBSession = sessionmaker(bind=engine)
 # session.rollback()
 session = DBSession()
 
+# Empty database first
+users = session.query(User).all()
+for user in users:
+       session.delete(user)
+session.commit()
+
+restaurants = session.query(Restaurant).all()
+for restaurant in restaurants:
+       session.delete(restaurant)
+session.commit()
+
+items = session.query(MenuItem).all()
+for item in items:
+       session.delete(item)
+session.commit()
 
 # Create dummy user
 User1 = User(name="Robo Barista", email="tinnyTim@udacity.com",
