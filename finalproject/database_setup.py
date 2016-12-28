@@ -1,20 +1,27 @@
-import sys
-
 from sqlalchemy import Column, ForeignKey, Integer, String
-
 from sqlalchemy.ext.declarative import declarative_base
-
-from sqlalchemy.orm import relationship   # Needed to create foreign key relationship
-
+from sqlalchemy.orm import relationship
 from sqlalchemy import create_engine
 
-# Lets sqlalchemy know our classes correspond to tables in db
-Base = declarative_base()   
+Base = declarative_base()
+
+
+class User(Base):
+    __tablename__ = 'user'
+
+    id = Column(Integer, primary_key=True)
+    name = Column(String(250), nullable=False)
+    email = Column(String(250), nullable=False)
+    picture = Column(String(250))
+
 
 class Restaurant(Base):
     __tablename__ = 'restaurant'
-    name = Column(String(250), nullable=False)
+
     id = Column(Integer, primary_key=True)
+    name = Column(String(250), nullable=False)
+    user_id = Column(Integer, ForeignKey('user.id'))
+    user = relationship(User)
 
     @property
     def serialize(self):
@@ -24,33 +31,33 @@ class Restaurant(Base):
             'id': self.id,
         }
 
+
 class MenuItem(Base):
     __tablename__ = 'menu_item'
+
     name = Column(String(80), nullable=False)
     id = Column(Integer, primary_key=True)
-    course = Column(String(250))
     description = Column(String(250))
     price = Column(String(8))
+    course = Column(String(250))
     restaurant_id = Column(Integer, ForeignKey('restaurant.id'))
     restaurant = relationship(Restaurant)
+    user_id = Column(Integer, ForeignKey('user.id'))
+    user = relationship(User)
 
-    @property 
+    @property
     def serialize(self):
-        # Returns object data in easily serializable format
+        """Return object data in easily serializeable format"""
         return {
             'name': self.name,
             'description': self.description,
             'id': self.id,
             'price': self.price,
-            'course': self.course
+            'course': self.course,
         }
-        
 
 
+engine = create_engine('sqlite:///restaurantmenuwithusers.db')
 
-# Engine points to database we will use
-engine = create_engine('sqlite:///restaurantmenu.db')   
 
-# Adds classes as tables in our db
-Base.metadata.create_all(engine) 
-
+Base.metadata.create_all(engine)
