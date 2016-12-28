@@ -18,14 +18,12 @@ CLIENT_ID = json.loads(
     open('client_secrets.json', 'r').read())['web']['client_id']
 APPLICATION_NAME = "Restaurant Menu Application"
 
-
 # Connect to Database and create database session
 engine = create_engine('sqlite:///restaurantmenuwithusers.db')
 Base.metadata.bind = engine
 
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
-
 
 # Create anti-forgery state token
 @app.route('/login')
@@ -36,7 +34,7 @@ def showLogin():
     # return "The current session state is %s" % login_session['state']
     return render_template('login.html', STATE=state)
 
-
+# Connect with Facebook
 @app.route('/fbconnect', methods=['POST'])
 def fbconnect():
     if request.args.get('state') != login_session['state']:
@@ -102,7 +100,7 @@ def fbconnect():
     flash("Now logged in as %s" % login_session['username'])
     return output
 
-
+# Disconnect from Facebook - Revoke a current user's token and reset their login_session
 @app.route('/fbdisconnect')
 def fbdisconnect():
     facebook_id = login_session['facebook_id']
@@ -113,7 +111,7 @@ def fbdisconnect():
     result = h.request(url, 'DELETE')[1]
     return "you have been logged out"
 
-
+# Connect with Google
 @app.route('/gconnect', methods=['POST'])
 def gconnect():
     # Validate state token
@@ -206,8 +204,6 @@ def gconnect():
     return output
 
 # User Helper Functions
-
-
 def createUser(login_session):
     newUser = User(name=login_session['username'], email=login_session[
                    'email'], picture=login_session['picture'])
@@ -229,7 +225,7 @@ def getUserID(email):
     except:
         return None
 
-# DISCONNECT - Revoke a current user's token and reset their login_session 
+# Disconnect from google  
 @app.route('/gdisconnect')
 def gdisconnect():
     # Only disconnect a connected user.
@@ -270,7 +266,6 @@ def menuItemJSON(restaurant_id, menu_id):
 def restaurantsJSON():
     restaurants = session.query(Restaurant).all()
     return jsonify(restaurants=[r.serialize for r in restaurants])
-
 
 # Show all restaurants
 @app.route('/')
@@ -314,7 +309,6 @@ def editRestaurant(restaurant_id):
     else:
         return render_template('editRestaurant.html', restaurant=editedRestaurant)
 
-
 # Delete a restaurant
 @app.route('/restaurant/<int:restaurant_id>/delete/', methods=['GET', 'POST'])
 def deleteRestaurant(restaurant_id):
@@ -344,7 +338,6 @@ def showMenu(restaurant_id):
         return render_template('publicmenu.html', items=items, restaurant=restaurant, creator=creator)
     else:
         return render_template('menu.html', items=items, restaurant=restaurant, creator=creator)
-
 
 # Create a new menu item
 @app.route('/restaurant/<int:restaurant_id>/menu/new/', methods=['GET', 'POST'])
@@ -389,7 +382,6 @@ def editMenuItem(restaurant_id, menu_id):
     else:
         return render_template('editmenuitem.html', restaurant_id=restaurant_id, menu_id=menu_id, item=editedItem)
 
-
 # Delete a menu item
 @app.route('/restaurant/<int:restaurant_id>/menu/<int:menu_id>/delete', methods=['GET', 'POST'])
 def deleteMenuItem(restaurant_id, menu_id):
@@ -406,7 +398,6 @@ def deleteMenuItem(restaurant_id, menu_id):
         return redirect(url_for('showMenu', restaurant_id=restaurant_id))
     else:
         return render_template('deleteMenuItem.html', item=itemToDelete)
-
 
 # Disconnect based on provider
 @app.route('/disconnect')
@@ -428,7 +419,6 @@ def disconnect():
     else:
         flash("You were not logged in")
         return redirect(url_for('showRestaurants'))
-
 
 if __name__ == '__main__':
     app.secret_key = 'super_secret_key'
