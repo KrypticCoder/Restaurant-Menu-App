@@ -68,6 +68,6 @@ Run application:
 
 After the last command you are able to browse the application at this URL:
 
-`http://localhost:8000/`
+`http://localhost:5000/`
 
 It is important you use *localhost* instead of *0.0.0.0* inside the URL address. That will prevent OAuth from failing.
