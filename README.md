@@ -36,7 +36,9 @@ For an initial set up please follow these 2 steps:
 ##Folders
 - templates: .html pages that are rendered by webserverapp.py and project.py
 - static: holds our css stylesheet for customizing the app
+- ProblemSet1: Beginning to work with SQLAlchemy and ORM (Object Relational Mapping)
 - finalproject: Final project of Restaurant Menu App. 
+
 
 ##Usage
 
