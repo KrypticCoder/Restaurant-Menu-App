@@ -120,7 +120,7 @@ def gconnect():
     if request.args.get('state') != login_session['state']:
         response = make_response(json.dumps('Invalid state parameter.'), 401)
         response.headers['Content-Type'] = 'application/json'
-        return response
+        return response 
     # Obtain authorization code
     code = request.data
 
@@ -229,7 +229,7 @@ def getUserID(email):
     except:
         return None
 
-# DISCONNECT - Revoke a current user's token and reset their login_session
+# DISCONNECT - Revoke a current user's token and reset their login_session 
 @app.route('/gdisconnect')
 def gdisconnect():
     # Only disconnect a connected user.
