@@ -34,8 +34,11 @@ For an initial set up please follow these 2 steps:
 - project.py: same idea as webserver.py but built using Flask framework
 
 ##Folders
+Folders for webserver.py and project.py 
 - templates: .html pages that are rendered by webserverapp.py and project.py
 - static: holds our css stylesheet for customizing the app
+
+Standalone folders. View contents to see description
 - ProblemSet1: Beginning to work with SQLAlchemy and ORM (Object Relational Mapping)
 - finalproject: Final project of Restaurant Menu App. 
 
